@@ -27,25 +27,29 @@ class MyGeneral::Instance
   end
 
   def run_data
-    progressbar = ProgressBar.create
+    progressbar = ProgressBar.create(format: '%t: |%B| %c/%C %E')
     progressbar.total = complexity
     File.open(@log_file, 'r') do |file|
       until file.eof?
         line = file.readline
-        run_query(line, progressbar)
         progressbar.increment
+        run_query(line, progressbar)
       end
     end
   end
+
+  VERBS = ['SET', 'INSERT', 'UPDATE', 'DELETE', 'ALTER', 'DROP'].freeze
 
   def run_query(line, progressbar)
     data = line.split("\t")
     return if data.length < 3 # A connecting message
     return if data[-1].upcase.start_with?('CREATE DATABASE') # Ignore database scale query
     return unless data[-2].end_with?('Query') # Ignore not query
-    return if data[-1].upcase.start_with?('SELECT')# Ignore select query
-    return if data[-1].upcase.start_with?('SHOW') # Ignore show query
-    @db.run(data[-1])
+    return unless VERBS.map do |verb|
+      data[-1].upcase.start_with?(verb)
+    end.reduce(:|) # Ignore unless exact verb
+    query = data[-1]
+    @db.run(query)
   rescue => e
     progressbar.log("When executing #{line}")
     progressbar.log('We met a problem:')

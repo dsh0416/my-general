@@ -18,4 +18,7 @@ Gem::Specification.new do |s|
   s.metadata                 = { 'issue_tracker' => 'https://github.com/dsh0416/my_general/issues' }
   s.license                  = 'MIT'
   s.add_runtime_dependency     'ruby-progressbar', '~> 1.9'
+  s.add_runtime_dependency     'sequel',           '~> 5.0'
+  s.add_runtime_dependency     'mysql2',           '~> 0.4'
+  s.add_runtime_dependency     'sqlite3',          '~> 1.3'
 end

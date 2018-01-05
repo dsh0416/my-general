@@ -1,6 +1,19 @@
 #!/usr/bin/env ruby
 
+require 'optparse'
 require 'my_general'
 
-instance = MyGeneral::Instance.new('/Users/delton/Desktop/mysql.log', '')
+options = {}
 
+OptionParser.new do |opts|
+  opts.banner = 'Usage: my_general [options]'
+  opts.on('-l LOG_FILE", "--log", "General Purpose Log File') do |v|
+    options[:log] = v
+  end
+  opts.on('-d DATABASE_YAML", "--database", "Database Connection YAML') do |v|
+    options[:database] = v
+  end
+end.parse!
+
+instance = MyGeneral::Instance.new(options[:log], options[:database])
+instance.run

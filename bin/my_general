@@ -2,4 +2,5 @@
 
 require 'my_general'
 
-puts 'Hello World'
+instance = MyGeneral::Instance.new('/Users/delton/Desktop/mysql.log', '')
+

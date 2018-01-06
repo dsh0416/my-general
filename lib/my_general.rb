@@ -1,3 +1,4 @@
+require 'date'
 require 'ruby-progressbar'
 require 'sequel'
 require 'yaml'
